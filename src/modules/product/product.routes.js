@@ -23,6 +23,13 @@ router.put('/:productId',
     multerMiddleHost({ extensions: allowedExtensions.image }).single('image'),
     expressAsyncHandler(Pc.updateProduct)
 )
+router.delete("/" ,auth([systemRoles.SUPER_ADMIN , systemRoles.ADMIN])  ,expressAsyncHandler(Pc.deleteProduct))
+
+router.get("/" , expressAsyncHandler(Pc.getProducts))
+router.get("/getProductById" , expressAsyncHandler(Pc.getProductById))
+router.get("/getProductsForTwoSpecificBrands" , expressAsyncHandler(Pc.getProductsForTwoSpecificBrands))
+router.get("/searchOnProductWithAnyField" , expressAsyncHandler(Pc.searchOnProductWithAnyField))
+
 
 
 export default router

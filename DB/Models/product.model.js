@@ -32,7 +32,7 @@ const productSchema = new Schema({
     /** Objects(Map)*/
     specs: {
         type: Map,
-        of: [String || Number]
+        of: [String | Number]
     },
 
     /** ObjectIds */

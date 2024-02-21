@@ -30,7 +30,7 @@ export const addCategory = async (req, res, next) => {
       folder: `${process.env.MAIN_FOLDER}/Categories/${folderId}`,
     });
 
-    req.folder = `${process.env.MAIN_FOLDER}/Categories/${folderId}`
+  req.folder = `${process.env.MAIN_FOLDER}/Categories/${folderId}`;
 
   // 5- generate the categroy object
   const category = {
@@ -42,14 +42,12 @@ export const addCategory = async (req, res, next) => {
   };
   // 6- create the category
   const categoryCreated = await Category.create(category);
-  req.savedDocuments = { model: Category, _id: categoryCreated._id }
-  res
-    .status(201)
-    .json({
-      success: true,
-      message: "Category created successfully",
-      data: categoryCreated,
-    });
+  req.savedDocuments = { model: Category, _id: categoryCreated._id };
+  res.status(201).json({
+    success: true,
+    message: "Category created successfully",
+    data: categoryCreated,
+  });
 };
 
 //================================ upadte category ================================//
@@ -107,13 +105,11 @@ export const updateCategory = async (req, res, next) => {
   category.updatedBy = _id;
 
   await category.save();
-  res
-    .status(200)
-    .json({
-      success: true,
-      message: "Category updated successfully",
-      data: category,
-    });
+  res.status(200).json({
+    success: true,
+    message: "Category updated successfully",
+    data: category,
+  });
 };
 
 //============================== get all categories ==============================//
@@ -121,16 +117,14 @@ export const getAllCategories = async (req, res, next) => {
   const categories = await Category.find().populate([
     {
       path: "subcategories",
-      populate: [{ path: "Brands" }],
+      populate: [{ path: "Brands", populate: [{ path: "products" }] }],
     },
   ]);
-  res
-    .status(200)
-    .json({
-      success: true,
-      message: "Categories fetched successfully",
-      data: categories,
-    });
+  res.status(200).json({
+    success: true,
+    message: "Categories fetched successfully",
+    data: categories,
+  });
 };
 
 //====================== delete category ======================//

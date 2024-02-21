@@ -1,7 +1,5 @@
 import userModel from "../../../DB/Models/user.model.js";
 
-
-
 /*==================================updateUser============================================== */
 export const updateUser = async (req, res, next) => {
   const { email, phoneNumbers, username, addresses, age, role } = req.body;
@@ -12,7 +10,7 @@ export const updateUser = async (req, res, next) => {
       return next(new Error("Email Is Already Exist", { cause: 400 }));
   }
   // updateUser
-    const updatedUser = await userModel.findByIdAndUpdate(
+  const updatedUser = await userModel.findByIdAndUpdate(
     req.authUser._id,
     {
       email,
@@ -22,11 +20,11 @@ export const updateUser = async (req, res, next) => {
       age,
       role,
     },
-    {new : true}
+    { new: true }
   );
 
   if (!updatedUser) return next(new Error("update Fail", { cause: 500 }));
-  return res.status(200).json({ message: "Done",  updatedUser });
+  return res.status(200).json({ message: "Done", updatedUser });
 };
 
 /*==================================deleteUser============================================== */
@@ -36,7 +34,7 @@ export const deleteUser = async (req, res, next) => {
   // deleteUser
   const deletedUser = await userModel.findByIdAndDelete(_id);
   if (!deletedUser) return next(new Error("Create Fail", { cause: 500 }));
-  return res.status(200).json({ message: "Done",  deletedUser });
+  return res.status(200).json({ message: "Done", deletedUser });
 };
 
 /*==================================getUser============================================== */
