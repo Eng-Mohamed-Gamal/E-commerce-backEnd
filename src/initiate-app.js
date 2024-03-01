@@ -1,9 +1,11 @@
+import { gracefulShutdown } from "node-schedule";
 import db_connection from "../DB/connection.js";
 import { globalResponse } from "./middlewares/global-response.middleware.js";
 import { rollbackSavedDocuments } from "./middlewares/rollback-saved-documnets.middleware.js";
 import { rollbackUploadedFiles } from "./middlewares/rollback-uploaded-files.middleware.js";
 
 import * as routers from "./modules/index.routes.js";
+import { scheduleCronsForCouponCheck } from "./utils/crons.js";
 
 export const initiateApp = (app, express) => {
   const port = process.env.PORT;
@@ -16,8 +18,11 @@ export const initiateApp = (app, express) => {
   app.use("/subCategory", routers.subCategoryRouter);
   app.use("/brand" , routers.brandRouter )
   app.use("/product" , routers.productRouter )
-
+  app.use("/cart" , routers.cartRouter )
+  
   app.use(globalResponse , rollbackSavedDocuments , rollbackUploadedFiles);
+  scheduleCronsForCouponCheck()
+  gracefulShutdown()
 
   app.listen(port, () => console.log(`E-commerce app listening on port ${port}!`));
 };

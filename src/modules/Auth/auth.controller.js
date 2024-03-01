@@ -36,7 +36,7 @@ export const signUp = async (req, res, next) => {
     subject: "Email Verification",
     message: `
         <h2>please clich on this link to verfiy your email</h2>
-        <a href="http://localhost:3000/auth/verify-email?token=${usertoken}">Verify Email</a>
+        <a href="${req.protocol}://${req.headers.host}/auth/verify-email?token=${usertoken}">Verify Email</a>
         `,
   });
   // 4- check if email is sent successfully

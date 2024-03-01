@@ -20,6 +20,8 @@ const categorySchema = new Schema(
         toObject: { virtuals: true }
     })
 
+    
+
 // virtual populate for subCategories model
 categorySchema.virtual('subcategories', {
     ref: 'SubCategory',
