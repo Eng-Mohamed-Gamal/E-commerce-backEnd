@@ -23,4 +23,9 @@ router.get(
   expressAsyncHandler(uc.getUser)
 );
 
+router.get(
+  "/getUsers",
+  expressAsyncHandler(uc.test)
+);
+
 export default router;

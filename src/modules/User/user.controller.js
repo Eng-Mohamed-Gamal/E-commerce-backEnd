@@ -45,3 +45,12 @@ export const getUser = async (req, res, next) => {
   const user = await userModel.findById(_id);
   return res.status(200).json({ message: "Done", user });
 };
+
+export const getUsers = async (req, res, next) => {
+
+  const user = await userModel.find();
+
+  return res.status(200).json({ message: "Done", user });
+};
+
+
