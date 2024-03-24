@@ -168,3 +168,10 @@ export const deleteCategory = async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "Category deleted successfully" });
 };
+
+const getCategoryById = async (req , res , next) => {
+  const {categoryId} = req.query
+  const category = await Category.findById(categoryId)
+  if(!category) return next({message : "Category Not Found" , cause : 404})
+  return res.status(200).json({message: "Done" , category})
+}

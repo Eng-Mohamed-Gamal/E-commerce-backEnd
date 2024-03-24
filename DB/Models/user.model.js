@@ -1,54 +1,63 @@
-
 import { Schema, model } from "mongoose";
 import { systemRoles } from "../../src/utils/system-roles.js";
 
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     username: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 20,
-        tirm: true,
-        lowercase: true
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 20,
+      tirm: true,
+      lowercase: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        tirm: true,
-        lowercase: true
+      type: String,
+      required: true,
+      unique: true,
+      tirm: true,
+      lowercase: true,
     },
     password: {
-        type: String,
-        required: true,
-        minlength: 8,
+      type: String,
+      required: true,
+      minlength: 8,
     },
-    phoneNumbers: [{
+    phoneNumbers: [
+      {
         type: String,
         required: true,
-    }],
-    addresses: [{
+      },
+    ],
+    addresses: [
+      {
         type: String,
-        required: true
-    }],
+        required: true,
+      },
+    ],
     role: {
-        type: String,
-        enum: [systemRoles.USER, systemRoles.ADMIN , systemRoles.SUPER_ADMIN],
-        default: systemRoles.USER
+      type: String,
+      enum: [systemRoles.USER, systemRoles.ADMIN, systemRoles.SUPER_ADMIN],
+      default: systemRoles.USER,
     },
     isEmailVerified: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     age: {
-        type: Number,
-        min: 18,
-        max: 100
+      type: Number,
+      min: 18,
+      max: 100,
     },
     isLoggedIn: {
-        type: Boolean,
-        default: false
-    }
-}, { timestamps: true })
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: { type: Boolean, default: false, required: true },
+    forgetPassCode: { type: String ,  required: true },
+    token : {type : String}
+  },
+  { timestamps: true }
+);
 
-export default model('User', userSchema)
+export default model("User", userSchema);

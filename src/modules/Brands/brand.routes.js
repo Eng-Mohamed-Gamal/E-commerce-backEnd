@@ -21,6 +21,8 @@ router.put(
 );
 
 router.get( "/" , auth([systemRoles.SUPER_ADMIN]) , expressAsyncHandler( Bc.getAllBrands)) 
+router.get( "/getAllBrandsForCategory" , auth([systemRoles.SUPER_ADMIN]) , expressAsyncHandler( Bc.getAllBrandsForCategory)) 
+router.get( "/getAllBrandsForSubCategory" , auth([systemRoles.SUPER_ADMIN]) , expressAsyncHandler( Bc.getAllBrandsForSubCategory)) 
 
 router.delete( "/" , auth([systemRoles.ADMIN]) , expressAsyncHandler( Bc.deletebrand)) 
 

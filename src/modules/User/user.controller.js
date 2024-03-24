@@ -1,4 +1,7 @@
+
 import userModel from "../../../DB/Models/user.model.js";
+
+
 
 /*==================================updateUser============================================== */
 export const updateUser = async (req, res, next) => {
@@ -31,9 +34,13 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   const { _id } = req.authUser;
-  // deleteUser
-  const deletedUser = await userModel.findByIdAndDelete(_id);
-  if (!deletedUser) return next(new Error("Create Fail", { cause: 500 }));
+  // deleteUser soft Delete
+  const deletedUser = await userModel.findOneAndUpdate(
+    { _id, isDeleted: false },
+    { isDeleted: true },
+    { new: true }
+  );
+  if (!deletedUser) return next(new Error("Delete Fail", { cause: 500 }));
   return res.status(200).json({ message: "Done", deletedUser });
 };
 
@@ -49,10 +56,10 @@ export const getUser = async (req, res, next) => {
 /*==================================getUsers============================================== */
 
 export const getUsers = async (req, res, next) => {
-
   const users = await userModel.find();
 
   return res.status(200).json({ message: "Done", users });
 };
+
 
 

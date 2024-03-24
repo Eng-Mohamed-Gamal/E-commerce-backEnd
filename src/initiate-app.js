@@ -16,13 +16,25 @@ export const initiateApp = (app, express) => {
   app.use("/user", routers.userRouter);
   app.use("/category", routers.categoryRouter);
   app.use("/subCategory", routers.subCategoryRouter);
-  app.use("/brand" , routers.brandRouter )
-  app.use("/product" , routers.productRouter )
-  app.use("/cart" , routers.cartRouter )
-  
-  app.use(globalResponse , rollbackSavedDocuments , rollbackUploadedFiles);
-  scheduleCronsForCouponCheck()
-  gracefulShutdown()
+  app.use("/brand", routers.brandRouter);
+  app.use("/product", routers.productRouter);
+  app.use("/cart", routers.cartRouter);
+  app.use("/coupon", routers.couponRouter);
+  app.use("/order", routers.orderRouter);
+  app.use("/review", routers.reviewRouter);
 
-  app.listen(port, () => console.log(`E-commerce app listening on port ${port}!`));
+  app.use("*", (req, res, next) => {
+    return res.status(404).json({
+      message: "Not Found",
+    });
+  });
+
+  app.use(globalResponse, rollbackSavedDocuments, rollbackUploadedFiles);
+  
+  scheduleCronsForCouponCheck();
+  gracefulShutdown();
+
+  app.listen(port, () =>
+    console.log(`E-commerce app listening on port ${port}!`)
+  );
 };

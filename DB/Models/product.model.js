@@ -13,7 +13,7 @@ const productSchema = new Schema({
     title: { type: String, required: true, trim: true },
     desc: String,
     slug: { type: String, required: true, trim: true },  /** @todo make the slug in lowercase */
-    folderId: { type: String, required: true, unique: true },
+    folderId: { type: String, required: true, unique: true }, 
 
 
     /** Number */

@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 // generate a cron job to check the coupon status
 export const scheduleCronsForCouponCheck = () => {
-    scheduleJob('*/5 * * * * *', async () => {
+    scheduleJob('* * */2 * * *', async () => {
         console.log('CouponCheck() is running ...');
         const coupons  = await Coupon.find({couponStatus:'valid'});
         for (const coupon of coupons) {

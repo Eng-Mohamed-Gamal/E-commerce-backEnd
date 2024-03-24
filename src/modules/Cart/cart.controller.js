@@ -46,7 +46,7 @@ export const removeFromcart = async (req, res, next) => {
     const newCart = await cart.save()
     // delete cart if there is no products
     if (newCart.products.length === 0) await Cart.findByIdAndDelete(newCart._id)
-    res.status(200).json({ message: 'Product delete to from successfully' })
+    res.status(200).json({ message: 'Product delete to from cart successfully' })
 }
 
 

@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import Coupon from  '../../DB/Models/coupon.model.js';
 import CouponUsers from  '../../DB/Models/coupon-users.model.js';
 
+
 export const couponValidation = async (couponCode , userId) =>{
 
     //couponCode check
@@ -14,6 +15,9 @@ export const couponValidation = async (couponCode , userId) =>{
        DateTime.fromISO(coupon.toDate) < DateTime.now()
     ) return {message: 'Coupon is expired', status: 400};
 
+
+    // disabled check 
+    if(coupon.couponStatus === "disabled") return {message : "Cannot Use Disabled Coupon" , status : 400 }
 
     // valid check
     if( DateTime.fromISO(coupon.fromDate) > DateTime.now() )
@@ -31,4 +35,6 @@ export const couponValidation = async (couponCode , userId) =>{
     
 
 }
+
+
 

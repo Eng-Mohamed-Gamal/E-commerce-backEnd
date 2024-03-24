@@ -16,7 +16,7 @@ const couponSchema = new mongoose.Schema({
     couponStatus:{
         type: String,
         default: 'valid',
-        enum:[ 'valid', 'expired']
+        enum:[ 'valid', 'expired' , "enabled" , "disabled"]
     },
     isFixed:{
         type: Boolean,
@@ -40,7 +40,11 @@ const couponSchema = new mongoose.Schema({
     updatedBy:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
-    }
+    },
+    disabledAt : {type : String},
+    disabledBy : {type : String},
+    enabledBy : {type : String},
+    enabledAt : {type : String},
 },{timestamps: true});
 
 

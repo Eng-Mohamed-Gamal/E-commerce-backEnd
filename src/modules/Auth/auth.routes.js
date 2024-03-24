@@ -10,6 +10,9 @@ router.get('/verify-email', expressAsyncHandler(authController.verifyEmail))
 
 
 router.post('/login', expressAsyncHandler(authController.signIn))
+router.post('/forgetPassword', expressAsyncHandler(authController.forgetPassword))
+router.post('/resetPassword', expressAsyncHandler(authController.resetPassword))
+router.patch('/', expressAsyncHandler(authController.updatePassword))
 
 
 

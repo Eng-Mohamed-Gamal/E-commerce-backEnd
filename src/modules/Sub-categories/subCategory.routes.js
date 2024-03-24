@@ -26,9 +26,19 @@ router.put(
 );
 
 router.get(
-  "/",
+  "/getAllSubCategoriesWithBrand",
   auth(endPointsRoles.ADD_CATEGORY),
   expressAsyncHandler(subCategoryController.getAllSubCategoriesWithBrand)
+);
+router.get(
+  "/getAllSubCategoriesForCategory",
+  auth(endPointsRoles.ADD_CATEGORY),
+  expressAsyncHandler(subCategoryController.getAllSubCategoriesForCategory)
+);
+router.get(
+  "/getSubCategoryBiId",
+  auth(endPointsRoles.ADD_CATEGORY),
+  expressAsyncHandler(subCategoryController.getSubCategoryBId)
 );
 router.delete(
   "/:subCategoryId",

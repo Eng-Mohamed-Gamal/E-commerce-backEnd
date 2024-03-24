@@ -134,10 +134,11 @@ export const signIn = async (req, res, next) => {
     process.env.JWT_SECRET_LOGIN,
     { expiresIn: "1d" }
   );
-  
+
   // updated isLoggedIn = true  in database
 
   user.isLoggedIn = true;
+  user.token = token
   await user.save();
 
   res.status(200).json({
@@ -148,3 +149,69 @@ export const signIn = async (req, res, next) => {
     },
   });
 };
+
+export const forgetPassword = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return next({ message: "User Is Not Exist", cause: 404 });
+  const forgetPassCode = generateUniqueString("123456asdfgh", 5);
+  const hashCode = bcrypt.hashSync(forgetPassCode, +process.env.SALT_ROUNDS);
+  const token = jwt.sign(
+    { email, forgetPassCode: hashCode },
+    process.env.JWT_SECRET_FORGET,
+    { expiresIn: "1h" }
+  );
+  const resetPasswordLink = `${req.protocol}/${req.headers.host}/auth/resetPassword/${token}`;
+  const isEmailSent = sendEmailService({
+    to: email,
+    subject: "Reset Password",
+    message: `<h1> click the below link to reset your password </h1> 
+    <a href=${resetPasswordLink}>Reset Password</a>
+    `,
+  });
+  if (!isEmailSent)
+    return next({
+      message: "Email is not sent, please try again later",
+      cause: 400,
+    });
+
+  user.forgetPassCode = hashCode;
+  await user.save();
+
+  return res.status(200).json({ message: "Done" });
+};
+
+export const resetPassword = async (req, res, next) => {
+  const { newPAssword } = req.body;
+  const { token } = req.params;
+
+  const decodedData = jwt.verify(token, process.env.JWT_SECRET_FORGET);
+
+  const user = await User.findOne({
+    email: decodedData.email,
+    forgetPassCode: decodedData.forgetPassCode,
+  });
+  if (!user)
+    return next({ message: "Reset Password Done Try To Login", cause: 404 });
+
+  const hashedPassword = bcrypt.hashSync(newPAssword, process.env.SALT_ROUNDS);
+
+  user.forgetPassCode = null;
+  user.password = hashedPassword;
+  await user.save();
+
+  return res.status(200).json({ message: "Done" });
+};
+
+
+export const updatePassword = async (req , res , next) => {
+  const {oldPassword , newPAssword} = req.body
+  const {authUser} =req
+  const checkPassword = bcrypt.compareSync(oldPassword , authUser.password )
+  if(!checkPassword) return next({message : "Wrong Password" , cause : 400})
+  const hashedPassword = bcrypt.hashSync(newPAssword , +process.env.SALT_ROUNDS)
+  authUser.password = hashedPassword
+  await authUser.save()
+  return res.status(200).json({message : "Update Password Done"})
+
+}

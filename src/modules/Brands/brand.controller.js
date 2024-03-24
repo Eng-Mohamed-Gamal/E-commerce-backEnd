@@ -109,13 +109,11 @@ export const updateBrand = async (req, res, next) => {
     brandExist.Image.secure_url = secure_url;
 
     await brandExist.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "brand updated successfully",
-        data: brandExist,
-      });
+    res.status(200).json({
+      success: true,
+      message: "brand updated successfully",
+      data: brandExist,
+    });
   }
 };
 
@@ -156,4 +154,25 @@ export const deletebrand = async (req, res, next) => {
 export const getAllBrands = async (req, res, next) => {
   const allBrands = await brandModel.find();
   res.status(200).json({ message: "Done", allBrands });
+};
+
+export const getAllBrandsForSubCategory = async (req, res, next) => {
+  const { subCategoryId } = req.query;
+  const allBrands = await brandModel.find({ subCategoryId });
+  res
+    .status(200)
+    .json({
+      message: "Done",
+      allBrands: allBrands.length ? allBrands : "No Brands Found",
+    });
+};
+export const getAllBrandsForCategory = async (req, res, next) => {
+  const { CategoryId } = req.query;
+  const allBrands = await brandModel.find({ CategoryId });
+  res
+    .status(200)
+    .json({
+      message: "Done",
+      allBrands: allBrands.length ? allBrands : "No Brands Found",
+    });
 };
