@@ -54,7 +54,7 @@ const userSchema = new Schema(
       default: false,
     },
     isDeleted: { type: Boolean, default: false, required: true },
-    forgetPassCode: { type: String ,  required: true },
+    forgetPassCode: { type: String },
     token : {type : String}
   },
   { timestamps: true }

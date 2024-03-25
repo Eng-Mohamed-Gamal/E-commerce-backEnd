@@ -3,9 +3,8 @@ import PDFDocument from "pdfkit";
 import path from "path";
 import couponModel from "../../DB/Models/coupon.model.js";
 
- async function createInvoice(invoice, pathVar) {
+async function createInvoice(invoice, pathVar) {
   let doc = new PDFDocument({ size: "A4", margin: 50 });
-
   generateHeader(doc);
   generateCustomerInformation(doc, invoice);
   await generateInvoiceTable(doc, invoice);
@@ -20,12 +19,12 @@ function generateHeader(doc) {
     .image("default.jpg", 50, 45, { width: 50 })
     .fillColor("#444444") // black
     .fontSize(20) // 20
-    .text("Otlop", 110, 57)
+    .text("E-commerce", 110, 57)
     .fillColor("#09c")
     .fontSize(10)
-    .text("E-Commerce", 200, 50, { align: "left" })
-    .text("6 tahrir street", 200, 65, { align: "left" })
-    .text("Cairo,Egypt", 200, 80, { align: "left" })
+    .text("Otlop", 200, 50, { align: "right" })
+    .text("6 tahrir street", 200, 65, { align: "right" })
+    .text("Cairo,Egypt", 200, 80, { align: "right" })
     .moveDown();
 }
 
@@ -81,14 +80,14 @@ async function generateInvoiceTable(doc, invoice) {
 
   for (i = 0; i < invoice.items.length; i++) {
     const item = invoice.items[i];
-    const position = invoiceTableTop + (i + 1) * 30;
+    const position = invoiceTableTop + (i + 1) * 30 ;
     generateTableRow(
       doc,
       position,
       item.title, // product title
       formatCurrency(item.price), // product price
       item.quantity, // product quantity
-      formatCurrency(item.finalPrice) // product final price
+      formatCurrency(item.price * item.quantity ) // product final price
     );
 
     generateHr(doc, position + 20);
@@ -109,7 +108,7 @@ async function generateInvoiceTable(doc, invoice) {
   if (isCoupon?.isFixed == true) {
     invoice.coupon = formatCurrency(invoice.coupon);
   }
-  if (isCoupon?.isPercentage == true) {
+  if (isCoupon?.isPercentage == true){
     invoice.coupon = `${invoice.coupon}%`;
   }
   if (!invoice.coupon) {
@@ -127,7 +126,7 @@ async function generateInvoiceTable(doc, invoice) {
     invoice.coupon // orderDiscount
   );
 
-  const paidToDatePosition = subtotalPosition + 20;
+  const paidToDatePosition = subtotalPosition + 40;
   generateTableRow(
     doc,
     paidToDatePosition,
@@ -137,7 +136,6 @@ async function generateInvoiceTable(doc, invoice) {
     "",
     formatCurrency(invoice.paidAmount) // orderPaidAmount
   );
-
   doc.font("Helvetica");
 }
 

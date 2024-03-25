@@ -18,7 +18,7 @@ export const auth = (accessRoles) => {
         return next(new Error("unauthorized", { cause: 401 }));
       req.authUser = findUser;
       next();
-    } catch (error) {
+    } catch (error) { 
         console.log(error);
       if (error == "TokenExpiredError: jwt expired") {
         const findUser = await User.findOne({ token: accesstoken });

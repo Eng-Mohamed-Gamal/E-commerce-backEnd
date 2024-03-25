@@ -111,7 +111,7 @@ export const createOrder = async (req, res, next) => {
     date: order.createdAt,
     items: order.orderItems,
     subTotal: order.shippingPrice,
-    paidAmount: order.totalPrice,
+    paidAmount: order.totalPrice, 
     couponId: coupon?._id,
     coupon: coupon?.couponAmount,
     shipping: {
@@ -123,16 +123,17 @@ export const createOrder = async (req, res, next) => {
     },
   };
 
+
   await createInvoice(orderInvoice , `${orderCode}.pdf`)
 
-  const sendEmail = await sendEmailService({
-    to: req.authUser.email,
-    subject: 'Order Confirmation',
-    message: '<h1>Check your Invoice Confirmation below</h1>',
-    attachments: [{path: `./Files/${orderCode}.pdf`}]
-})
+//   const sendEmail = await sendEmailService({
+//     to: req.authUser.email,
+//     subject: 'Order Confirmation',
+//     message: '<h1>Check your Invoice Confirmation below</h1>',
+//     attachments: [{path: `./Files/${orderCode}.pdf`}]
+// })
 
-  res.status(201).json({ message: "Order created successfully", orderQR });
+  return res.status(201).json({ message: "Order created successfully", });
 };
 
 export const convertFromcartToOrder = async (req, res, next) => {
