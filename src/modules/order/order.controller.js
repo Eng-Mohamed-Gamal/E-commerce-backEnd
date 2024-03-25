@@ -126,12 +126,12 @@ export const createOrder = async (req, res, next) => {
 
   await createInvoice(orderInvoice , `${orderCode}.pdf`)
 
-//   const sendEmail = await sendEmailService({
-//     to: req.authUser.email,
-//     subject: 'Order Confirmation',
-//     message: '<h1>Check your Invoice Confirmation below</h1>',
-//     attachments: [{path: `./Files/${orderCode}.pdf`}]
-// })
+  const sendEmail = await sendEmailService({
+    to: req.authUser.email,
+    subject: 'Order Confirmation',
+    message: '<h1>Check your Invoice Confirmation below</h1>',
+    attachments: [{path: `./Files/${orderCode}.pdf`}]
+})
 
   return res.status(201).json({ message: "Order created successfully", });
 };
