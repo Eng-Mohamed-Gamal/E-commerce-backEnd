@@ -334,7 +334,7 @@ export const stripeWebhookLocal = async (req, res, next) => {
   res.status(200).json({ message: "webhook received" });
 };
 
-//====================== refund  order =======================//
+//====================== refund order =======================//
 export const refundOrder = async (req, res, next) => {
   const { orderId } = req.params;
 
