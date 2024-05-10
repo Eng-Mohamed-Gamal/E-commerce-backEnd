@@ -168,17 +168,16 @@ export const updateProduct = async (req, res, next) => {
 // ================================== get products ========================================= //
 
 export const getProducts = async (req, res, next) => {
-  const { page, size, sort, ...Rest } = req.query;
+  const { page, size, } = req.query;
   const features = new APIFeatures(Product.find())
     .pagination({ page, size })
-    // .filters(Rest);
   const products = await features.mongooseQuery;
   res.status(200).json({ success: true, data: products });
 };
 
 // ================================== get product by id ========================================= //
 export const getProductById = async (req, res, next) => {
-  const { productId } = req.query;
+  const { productId } = req.params;
   const product = await Product.findById(productId);
   if (!product) return next({ message: "Product Not Found", cause: 404 });
   return res.status(200).json({ message: "Done", product });
@@ -187,7 +186,7 @@ export const getProductById = async (req, res, next) => {
 // ================================== delete product  ========================================= //
 
 export const deleteProduct = async (req, res, next) => {
-  const { productId } = req.query;
+  const { productId } = req.params;
   const { _id: addedBy, role } = req.authUser;
 
   const folderPath = product.Images[0].public_id.split(

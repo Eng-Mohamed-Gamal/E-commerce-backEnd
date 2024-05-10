@@ -4,6 +4,7 @@ import cloudinaryConnection from "../../utils/cloudinary.js";
 import generateUniqueString from "../../utils/generate-Unique-String.js";
 import subCategoryModel from "../../../DB/Models/sub-category.model.js";
 import brandModel from "../../../DB/Models/brand.model.js";
+import { APIFeatures } from "../../utils/api-features.js";
 
 //============================== add category ==============================//
 export const addCategory = async (req, res, next) => {
@@ -114,17 +115,64 @@ export const updateCategory = async (req, res, next) => {
 
 //============================== get all categories ==============================//
 export const getAllCategories = async (req, res, next) => {
-  const categories = await Category.find().populate([
-    {
-      path: "subcategories",
-      populate: [{ path: "Brands", populate: [{ path: "products" }] }],
-    },
-  ]);
-  res.status(200).json({
-    success: true,
-    message: "Categories fetched successfully",
-    data: categories,
-  });
+  const { page, size } = req.query;
+  const { tillWhat } = req.body;
+
+  if (tillWhat === "subCategories") {
+    const categories = Category.find().populate([
+      {
+        path: "subCategories",
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+  }
+  if (tillWhat === "brands") {
+    const features = new APIFeatures(
+      Category.find().populate([
+        {
+          path: "subCategories",
+          populate: { path: "Brands" },
+        },
+      ])
+    ).pagination({ page, size });
+    const categories = await features.mongooseQuery;
+
+    res.status(200).json({
+      success: true,
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+  }
+  if (tillWhat === "products") {
+    const features = new APIFeatures(
+      Category.find().populate([
+        {
+          path: "subCategories",
+          populate: { path: "Brands", populate: { path: "Products" } },
+        },
+      ])
+    ).pagination({ page, size });
+    const categories = await features.mongooseQuery;
+
+    res.status(200).json({
+      success: true,
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+  }
+  if (!tillWhat) {
+    const categories = await Category.find();
+    res.status(200).json({
+      success: true,
+      message: "Categories fetched successfully",
+      data: categories,
+    });
+  }
 };
 
 //====================== delete category ======================//
@@ -169,9 +217,9 @@ export const deleteCategory = async (req, res, next) => {
     .json({ success: true, message: "Category deleted successfully" });
 };
 
-const getCategoryById = async (req , res , next) => {
-  const {categoryId} = req.query
-  const category = await Category.findById(categoryId)
-  if(!category) return next({message : "Category Not Found" , cause : 404})
-  return res.status(200).json({message: "Done" , category})
-}
+export const getCategoryById = async (req, res, next) => {
+  const { categoryId } = req.params;
+  const category = await Category.findById(categoryId);
+  if (!category) return next({ message: "Category Not Found", cause: 404 });
+  return res.status(200).json({ message: "Done", category });
+};

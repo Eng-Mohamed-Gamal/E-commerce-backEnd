@@ -4,7 +4,7 @@ import reviewModel from "../../../DB/Models/review.model.js";
 
 export const addReview = async (req, res, next) => {
   const { _id: user } = req.authUser;
-  const { productId } = req.query;
+  const { productId } = req.params;
   const { reviewRate, reviewComment } = req.body;
   // check if user authorized to add review on this product
   const check = await orderModel.findOne({
@@ -42,19 +42,17 @@ export const addReview = async (req, res, next) => {
 };
 
 export const getReviewsForProduct = async (req, res, next) => {
-  const { productId } = req.query;
+  const { productId } = req.params;
   const reviews = await reviewModel.find({ productId });
 
-  return res
-    .status(20)
-    .json({
-      message: "Review Deleted",
-      reviews: reviews.length ? reviews : "NO Reviews On This Product",
-    });
+  return res.status(20).json({
+    message: "Review Deleted",
+    reviews: reviews.length ? reviews : "NO Reviews On This Product",
+  });
 };
 export const deleteReview = async (req, res, next) => {
   const { _id: user } = req.authUser;
-  const { productId } = req.query;
+  const { productId } = req.params;
 
   const deletedReview = await reviewModel.findOneAndDelete({
     userId: user,

@@ -47,7 +47,6 @@ export class APIFeatures {
     if (search.color) queryFilter["specs.color"] = { $all: search.color };
     if (search.size) queryFilter["specs.size"] = { $all: search.size };
 
-
     this.mongooseQuery = this.mongooseQuery.find(queryFilter);
     return this;
   }

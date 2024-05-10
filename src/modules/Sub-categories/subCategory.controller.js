@@ -118,13 +118,11 @@ export const updateSubCategory = async (req, res, next) => {
     SubCategoryExist.updatedBy = _id;
 
     await SubCategoryExist.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "subCategory updated successfully",
-        data: SubCategoryExist,
-      });
+    res.status(200).json({
+      success: true,
+      message: "subCategory updated successfully",
+      data: SubCategoryExist,
+    });
   }
 };
 
@@ -177,22 +175,21 @@ export const getAllSubCategoriesWithBrand = async (req, res, next) => {
 };
 
 export const getAllSubCategoriesForCategory = async (req, res, next) => {
-  const { categoryId } = req.query;
+  const { categoryId } = req.params;
   // get all subCategories
   const subCategories = await SubCategory.find({ categoryId });
-  return res
-    .status(200)
-    .json({
-      message: "Done",
-      subCategories: subCategories.length
-        ? subCategories
-        : "No Subcategories Founds",
-    });
+  return res.status(200).json({
+    message: "Done",
+    subCategories: subCategories.length
+      ? subCategories
+      : "No Subcategories Founds",
+  });
 };
 export const getSubCategoryBId = async (req, res, next) => {
-  const { subCategoryId } = req.query;
+  const { subCategoryId } = req.params;
   // get subCategory
   const subCategory = await SubCategory.findById({ subCategoryId });
-  if(!subCategory) return next({message : "No Subcategory Found" , cause : 404})
+  if (!subCategory)
+    return next({ message: "No Subcategory Found", cause: 404 });
   return res.status(200).json({ message: "Done", subCategory });
 };

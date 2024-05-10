@@ -1,18 +1,28 @@
 import { Router } from "express";
-import * as RC from "./review.controller.js"
+import * as RC from "./review.controller.js";
 import expressAsyncHandler from "express-async-handler";
 import { auth } from "../../middlewares/auth.middleware.js";
 import { systemRoles } from "../../utils/system-roles.js";
+import * as validator from "./review.validation.js";
+import { validationMiddleware } from "../../middlewares/validation.middleware.js";
 
+const router = Router();
 
-const router = Router()
+router.post(
+  "/:productId",
+  auth([systemRoles.USER]),
+  expressAsyncHandler(RC.addReview)
+);
+router.delete(
+  "/:productId",
+  auth([systemRoles.USER]),
+  validationMiddleware(),
+  expressAsyncHandler(RC.deleteReview)
+);
+router.get(
+  "/:productId",
+  auth([systemRoles.USER]),
+  expressAsyncHandler(RC.getReviewsForProduct)
+);
 
-
-
-router.post("/" , auth([systemRoles.USER])  ,expressAsyncHandler(RC.addReview))
-router.delete("/" , auth([systemRoles.USER])  ,expressAsyncHandler(RC.deleteReview))
-router.get("/" , auth([systemRoles.USER])  ,expressAsyncHandler(RC.getReviewsForProduct))
-
-
-
-export default router
+export default router;

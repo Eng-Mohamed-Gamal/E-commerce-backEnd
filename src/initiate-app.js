@@ -4,7 +4,7 @@ import { globalResponse } from "./middlewares/global-response.middleware.js";
 import { rollbackSavedDocuments } from "./middlewares/rollback-saved-documnets.middleware.js";
 import { rollbackUploadedFiles } from "./middlewares/rollback-uploaded-files.middleware.js";
 
-import * as routers from "./modules/index.routes.js";
+import * as routers from "./modules/index.routes.js" ;
 import { scheduleCronsForCouponCheck } from "./utils/crons.js";
 
 export const initiateApp = (app, express) => {

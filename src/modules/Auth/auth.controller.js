@@ -5,7 +5,6 @@ import User from "../../../DB/Models/user.model.js";
 import sendEmailService from "../../services/send-email.service.js";
 
 // ========================================= SignUp API ================================//
-
 /**
  * destructuring the required data from the request body
  * check if the user already exists in the database using the email
@@ -138,7 +137,7 @@ export const signIn = async (req, res, next) => {
   // updated isLoggedIn = true  in database
 
   user.isLoggedIn = true;
-  user.token = token
+  user.token = token;
   await user.save();
 
   res.status(200).json({
@@ -182,7 +181,7 @@ export const forgetPassword = async (req, res, next) => {
 };
 
 export const resetPassword = async (req, res, next) => {
-  const { newPAssword } = req.body;
+  const { newPassword } = req.body;
   const { token } = req.params;
 
   const decodedData = jwt.verify(token, process.env.JWT_SECRET_FORGET);
@@ -194,7 +193,7 @@ export const resetPassword = async (req, res, next) => {
   if (!user)
     return next({ message: "Reset Password Done Try To Login", cause: 404 });
 
-  const hashedPassword = bcrypt.hashSync(newPAssword, process.env.SALT_ROUNDS);
+  const hashedPassword = bcrypt.hashSync(newPassword, process.env.SALT_ROUNDS);
 
   user.forgetPassCode = null;
   user.password = hashedPassword;
@@ -203,15 +202,36 @@ export const resetPassword = async (req, res, next) => {
   return res.status(200).json({ message: "Done" });
 };
 
+export const updatePassword = async (req, res, next) => {
+  const { password, newPAssword } = req.body;
+  const { authUser } = req;
+  const checkPassword = bcrypt.compareSync(password, authUser.password);
+  if (!checkPassword) return next({ message: "Wrong Password", cause: 400 });
+  const hashedPassword = bcrypt.hashSync(newPAssword, +process.env.SALT_ROUNDS);
+  authUser.password = hashedPassword;
+  await authUser.save();
+  return res.status(200).json({ message: "Update Password Done" });
+};
 
-export const updatePassword = async (req , res , next) => {
-  const {oldPassword , newPAssword} = req.body
-  const {authUser} =req
-  const checkPassword = bcrypt.compareSync(oldPassword , authUser.password )
-  if(!checkPassword) return next({message : "Wrong Password" , cause : 400})
-  const hashedPassword = bcrypt.hashSync(newPAssword , +process.env.SALT_ROUNDS)
-  authUser.password = hashedPassword
-  await authUser.save()
-  return res.status(200).json({message : "Update Password Done"})
-
-}
+export const logout = async (req, res, next) => {
+  // destruct data from user
+  const { _id } = req.authUser;
+  const { userId } = req.params;
+  if (_id != userId) {
+    return res.status(400).json({ msg: "You cannot logout this profile" });
+  }
+  // update user data
+  const updateUser = await User.findByIdAndUpdate(_id, {
+    isLoggedIn: false,
+  });
+  // check if user logout
+  if (!updateUser) {
+    return res.status(404).json({
+      msg: "Logout failed",
+    });
+  }
+  // send response
+  res.status(200).json({
+    msg: "User logged out successfully",
+  });
+};

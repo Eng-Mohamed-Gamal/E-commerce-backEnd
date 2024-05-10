@@ -359,7 +359,7 @@ export const refundOrder = async (req, res, next) => {
 };
 
 export const cancelOrder = async (req, res, next) => {
-  const { orderId } = req.query;
+  const { orderId } = req.params;
   // order Check
   const order = await Order.findById(orderId);
   if (!order) return next({ message: "Order Is Not Exist", cause: 404 });

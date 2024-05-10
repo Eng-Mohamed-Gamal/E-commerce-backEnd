@@ -4,6 +4,7 @@ import brandModel from "../../../DB/Models/brand.model.js";
 import subCategoryModel from "../../../DB/Models/sub-category.model.js";
 import cloudinaryConnection from "../../utils/cloudinary.js";
 import generateUniqueString from "../../utils/generate-Unique-String.js";
+import { APIFeatures } from "../../utils/api-features.js";
 
 // ============================= addBrand ========================== //
 
@@ -176,3 +177,12 @@ export const getAllBrandsForCategory = async (req, res, next) => {
       allBrands: allBrands.length ? allBrands : "No Brands Found",
     });
 };
+
+export const getBrandWithProducts = async (req, res, next)=> {
+  const {page, size, sort} = req.query
+  const features = new APIFeatures(brandModel.find().populate([ { path: 'Products'} ]))
+  .pagination({page, size})
+  .sort(sort)
+  const brand = await features.mongooseQuery
+  res.status(200).json({ msg: "Brands fetched successfully", data: brand })
+}

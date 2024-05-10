@@ -33,7 +33,7 @@ export const addToCart = async (req , res , next) => {
 
 
 export const removeFromcart = async (req, res, next) => {
-    const { productId } = req.query
+    const { productId } = req.params
     const { _id } = req.authUser
     // check if product is in cart.products
     const cart = await Cart.findOne({ userId: _id, 'products.productId': productId })
@@ -47,6 +47,16 @@ export const removeFromcart = async (req, res, next) => {
     // delete cart if there is no products
     if (newCart.products.length === 0) await Cart.findByIdAndDelete(newCart._id)
     res.status(200).json({ message: 'Product delete to from cart successfully' })
+}
+
+export const getCart = async (req, res) => {
+    // destruct data from the user
+    const { _id } = req.authUser
+    // check that cart is found
+    const userCart = await Cart.findOne({ userId: _id })
+    if (!userCart) return res.status(404).json({ msg: "Cart not found" })
+    // send response
+    res.status(200).json({ msg: "Cart fetched successfully", data: userCart })
 }
 
 
