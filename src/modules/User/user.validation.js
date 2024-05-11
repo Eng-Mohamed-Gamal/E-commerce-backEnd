@@ -1,4 +1,4 @@
-import { systemRoles } from "../../utils/system-roles";
+import { systemRoles } from "../../utils/system-roles.js";
 
 export const updateProfile = {
   body: Joi.object({
