@@ -3,7 +3,6 @@ import * as authController from "./auth.controller.js";
 import expressAsyncHandler from "express-async-handler";
 import * as validator from "./auth.validation.js";
 import { validationMiddleware } from "../../middlewares/validation.middleware.js";
-import * as validator from "./auth.validation.js"
 const router = Router();
 
 router.post(
