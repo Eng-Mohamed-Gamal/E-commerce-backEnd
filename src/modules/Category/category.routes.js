@@ -7,8 +7,8 @@ import { endPointsRoles } from "./category.endpoints.js";
 import { auth } from "../../middlewares/auth.middleware.js";
 import { allowedExtensions } from "../../utils/allowed-extensions.js";
 import { validationMiddleware } from "../../middlewares/validation.middleware.js";
-import * as validator from "./category.validator.js";
-import { systemRoles } from "../../utils/system-roles.js";
+import * as validator from "./category.validation.js";
+
 
 router.post(
   "/",

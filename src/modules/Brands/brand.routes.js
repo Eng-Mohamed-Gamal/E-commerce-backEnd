@@ -4,7 +4,7 @@ import { auth } from "../../middlewares/auth.middleware.js";
 import { systemRoles } from "../../utils/system-roles.js";
 import { multerMiddleHost } from "../../middlewares/multer.js";
 import { allowedExtensions } from "../../utils/allowed-extensions.js";
-import * as validator from "./brand.validator.js";
+import * as validator from "./brand.validation.js";
 import expressAsyncHandler from "express-async-handler";
 import { validationMiddleware } from "../../middlewares/validation.middleware.js";
 const router = Router();
