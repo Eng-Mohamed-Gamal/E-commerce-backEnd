@@ -11,17 +11,19 @@ const router = Router();
 router.post(
   "/:productId",
   auth([systemRoles.USER]),
+  validationMiddleware(validator.addReviewSchema),
   expressAsyncHandler(RC.addReview)
 );
 router.delete(
   "/:productId",
   auth([systemRoles.USER]),
-  validationMiddleware(),
+  validationMiddleware(validator.deleteReviewSchema),
   expressAsyncHandler(RC.deleteReview)
 );
 router.get(
   "/:productId",
   auth([systemRoles.USER]),
+  validationMiddleware(validator.allProductReviewsSchema),
   expressAsyncHandler(RC.getReviewsForProduct)
 );
 
